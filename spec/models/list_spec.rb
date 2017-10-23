@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe List, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it { should belong_to(:shop) }
+  it { should have_many(:items) }
+
+  #Validation test
+  it { should validate_presence_of(:total_capacity) }
 end

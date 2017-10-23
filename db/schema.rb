@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171023182715) do
+ActiveRecord::Schema.define(version: 20171023191836) do
 
   create_table "items", force: :cascade do |t|
     t.string   "name"
@@ -25,10 +25,10 @@ ActiveRecord::Schema.define(version: 20171023182715) do
   end
 
   create_table "lists", force: :cascade do |t|
-    t.integer  "total_capacity"
+    t.integer  "total_capacity", default: 10
     t.integer  "shop_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.index ["shop_id"], name: "index_lists_on_shop_id"
   end
 
