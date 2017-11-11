@@ -43,8 +43,35 @@ RSpec.describe 'Shops API', type: :request do
         expect(response.body).to match(/Couldn't find Shop/)
       end
     end
-
   end
 
+  describe 'POST /shops' do
+  # valid payload
+    let(:valid_attributes) { { location: 'Tescos', date: DateTime.now, shop_kind: 'food', shopper: 'Felix' } }
 
+    context 'when the request is valid' do
+      before { post '/shops', params: valid_attributes }
+
+      it 'creates a todo' do
+        expect(json['location']).to eq('Tescos')
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+    end
+
+    context 'when the request is invalid' do
+      before { post '/shops', params: { location: 'Foobar', shop_kind: 'food', shopper: 'Felix' } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a validation failure message' do
+        expect(response.body)
+          .to match(/Validation failed: Date can't be blank/)
+      end
+    end
+  end
 end

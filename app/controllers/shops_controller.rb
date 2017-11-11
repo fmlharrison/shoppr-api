@@ -11,10 +11,16 @@ class ShopsController < ApplicationController
     json_response(@shop)
   end
 
+  #POST /shops
+  def create
+    @shop = Shop.create!(shop_params)
+    json_response(@shop, :created)
+  end
+
   private
 
   def shop_params
-    params.permit(:location, :date, :type, :shopper)
+    params.permit(:location, :date, :shop_kind, :shopper)
   end
 
   def set_shop
