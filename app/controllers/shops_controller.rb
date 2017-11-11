@@ -1,5 +1,5 @@
 class ShopsController < ApplicationController
-  before_action :set_shop, only: [:show, :update]
+  before_action :set_shop, only: [:show, :update, :destroy]
   # GET /shops
   def index
     @shops = Shop.all
@@ -21,6 +21,12 @@ class ShopsController < ApplicationController
   def update
     @shop.update(shop_params)
     head :no_content
+  end
+
+  #DELETE /shops/:id
+  def destroy
+      @shop.destroy
+      head :no_content
   end
 
   private

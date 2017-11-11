@@ -90,4 +90,12 @@ RSpec.describe 'Shops API', type: :request do
       end
     end
   end
+
+  describe 'DELETE /shops/:id' do
+    before { delete "/shops/#{shop_id}" }
+
+    it 'returns status code 204' do
+      expect(response).to have_http_status(204)
+    end
+  end
 end
