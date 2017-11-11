@@ -1,5 +1,5 @@
 class ShopsController < ApplicationController
-  before_action :set_shop, only: [:show]
+  before_action :set_shop, only: [:show, :update]
   # GET /shops
   def index
     @shops = Shop.all
@@ -15,6 +15,12 @@ class ShopsController < ApplicationController
   def create
     @shop = Shop.create!(shop_params)
     json_response(@shop, :created)
+  end
+
+  #PUT /shops/:id
+  def update
+    @shop.update(shop_params)
+    head :no_content
   end
 
   private
