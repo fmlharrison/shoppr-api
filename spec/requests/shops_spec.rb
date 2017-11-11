@@ -32,6 +32,18 @@ RSpec.describe 'Shops API', type: :request do
       end
     end
 
+    context 'when a shop doesn;t exist' do
+      let(:shop_id) { 100 }
+
+      it 'return a 404 status code' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a not found message' do
+        expect(response.body).to match(/Couldn't find Shop/)
+      end
+    end
+
   end
 
 
