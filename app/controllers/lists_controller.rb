@@ -7,6 +7,11 @@ class ListsController < ApplicationController
     json_response(@list)
   end
 
+  def create
+    @list = @shop.create_list!(list_params)
+    json_response(@list, :created)
+  end
+
   private
 
   def list_params
