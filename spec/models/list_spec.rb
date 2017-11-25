@@ -6,4 +6,5 @@ RSpec.describe List, type: :model do
 
   #Validation test
   it { should validate_presence_of(:total_capacity) }
+  it { should validate_presence_of(:shop_id) }
 end

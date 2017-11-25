@@ -1,6 +1,6 @@
 class ListsController < ApplicationController
   before_action :set_shop
-  before_action :set_shop_list, only: [:show]
+  before_action :set_shop_list, only: [:show, :update, :destroy]
 
   #GET /shops/:shop_id/list
   def show
@@ -12,10 +12,20 @@ class ListsController < ApplicationController
     json_response(@list, :created)
   end
 
+  def update
+    @list.update(list_params)
+    head :no_content
+  end
+
+  def destroy
+    @list.destroy
+    head :no_content
+  end
+
   private
 
   def list_params
-    params.permit(:total_capacity)
+    params.permit(:total_capacity, :shop_id)
   end
 
   def set_shop
@@ -23,6 +33,6 @@ class ListsController < ApplicationController
   end
 
   def set_shop_list
-    @list = @shop.list if @shop
+    @list = List.find(@shop.list) if @shop
   end
 end
