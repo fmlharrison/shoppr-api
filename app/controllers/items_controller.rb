@@ -7,6 +7,10 @@ class ItemsController < ApplicationController
     json_response(@list.items)
   end
 
+  def show
+    json_response(@item)
+  end
+
   def create
     @item = @list.items.create!(item_params)
     json_response(@item, :created)
