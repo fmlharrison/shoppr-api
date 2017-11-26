@@ -8,9 +8,9 @@ RSpec.describe 'Items API', type: :request do
   let(:id) { items.first.id }
 
   describe 'GET /shops/:shop_id/list/items' do
-    before { get "/shops/#{shop_id}/list/items" }
-
     context 'when a list exists' do
+      before { get "/shops/#{shop_id}/list/items" }
+
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
       end
@@ -21,14 +21,17 @@ RSpec.describe 'Items API', type: :request do
     end
 
     context 'when a list does not exists' do
-      let(:shop_id) { 0 }
+      let!(:new_shop) { create(:shop) }
+      let(:new_shop_id) { new_shop.id }
+
+      before { get "/shops/#{new_shop_id}/list/items" }
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
       end
 
       it 'returns a list' do
-        expect(response.body).to match(/Couldn't find Shop/)
+        expect(response.body).to match(/Couldn't find List/)
       end
     end
   end
