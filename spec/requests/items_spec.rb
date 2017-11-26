@@ -49,7 +49,7 @@ RSpec.describe 'Items API', type: :request do
       end
     end
 
-    context 'when a list does not exists' do
+    context 'when a item does not exists' do
       let(:id) { 0 }
 
       it 'returns status code 404' do
@@ -93,37 +93,35 @@ RSpec.describe 'Items API', type: :request do
       end
     end
   end
-  #
-  # describe 'PUT /shops/:shop_id/list' do
-  #   let(:valid_attributes) { { total_capacity: 25 } }
-  #
-  #   context 'when list exists' do
-  #     before { put "/shops/#{shop_id}/list", params: valid_attributes }
-  #
-  #     it 'returns status code 204' do
-  #       expect(response).to have_http_status(204)
-  #     end
-  #
-  #     it 'updates the item' do
-  #       updated_list = List.find(list_id)
-  #       expect(updated_list.total_capacity).to match(25)
-  #     end
-  #   end
-  #
-  #   context 'when the item does not exist' do
-  #     let!(:other_shop) { create(:shop) }
-  #     let(:other_shop_id) { other_shop.id }
-  #     before { put "/shops/#{other_shop_id}/list", params: valid_attributes }
-  #
-  #     it 'returns status code 404' do
-  #       expect(response).to have_http_status(404)
-  #     end
-  #
-  #     it 'returns a not found message' do
-  #       expect(response.body).to match(/Couldn't find List/)
-  #     end
-  #   end
-  # end
+
+  describe 'PUT /shops/:shop_id/list' do
+    let(:valid_attributes) { { max_price: 8 } }
+
+    before { put "/shops/#{shop_id}/list/items/#{id}", params: valid_attributes }
+
+    context 'when list exists' do
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+
+      it 'updates the item' do
+        updated_item = Item.find(id)
+        expect(updated_item.max_price).to match(8.0)
+      end
+    end
+
+    context 'when a item does not exists' do
+      let(:id) { 0 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+
+      it 'returns a list' do
+        expect(response.body).to match(/Couldn't find Item/)
+      end
+    end
+  end
   #
   # #Test suite for DELETE /shops/:id/list
   # describe 'DELETE /shops/:shop_id/list' do

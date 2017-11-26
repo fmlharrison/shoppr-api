@@ -16,6 +16,11 @@ class ItemsController < ApplicationController
     json_response(@item, :created)
   end
 
+  def update
+    @item.update(item_params)
+    head :no_content
+  end
+
   private
 
   def item_params
