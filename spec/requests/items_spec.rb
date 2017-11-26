@@ -36,36 +36,38 @@ RSpec.describe 'Items API', type: :request do
     end
   end
 
-  # describe 'POST /shops/:shop_id/list' do
-  #   let!(:new_shop) { create(:shop) }
-  #   let(:new_shop_id) { new_shop.id }
-  #   let(:valid_attributes) { { total_capacity: 20, shop_id: new_shop_id } }
-  #
-  #   context 'when request attributes are valid' do
-  #     before { post "/shops/#{new_shop_id}/list", params: valid_attributes }
-  #
-  #     it 'returns status code 201' do
-  #       expect(response).to have_http_status(201)
-  #     end
-  #
-  #     it 'has a total capacity of 20' do
-  #       expect(json['total_capacity']).to be(20)
-  #     end
-  #   end
-  #
-  #   context 'when an invalid request' do
-  #     before { post "/shops/#{new_shop_id}/list", params: valid_attributes }
-  #     before { post "/shops/#{new_shop_id}/list", params: { bad_params: "wrong" } }
-  #
-  #     it 'returns status code 422' do
-  #       expect(response).to have_http_status(422)
-  #     end
-  #
-  #     it 'returns a failure message' do
-  #       expect(response.body).to match(/This shop already has a list/)
-  #     end
-  #   end
-  # end
+  describe 'POST /shops/:shop_id/list/item' do
+    let(:valid_attributes) { { name: 'Bacon', brand: 'Tesco', max_price: 5, quantity: 1, comment: '8 rashes please.' } }
+
+    context 'when request attributes are valid' do
+      before { post "/shops/#{shop_id}/list/items", params: valid_attributes }
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+
+      it 'has correct attributes' do
+        puts json
+        expect(json['name']).to eq('Bacon')
+        expect(json['brand']).to eq('Tesco')
+        expect(json['max_price']).to eq('5.0')
+        expect(json['quantity']).to eq(1)
+        expect(json['comment']).to eq('8 rashes please.')
+      end
+    end
+
+    context 'when an invalid request' do
+      before { post "/shops/#{shop_id}/list/items", params: {} }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'returns a failure message' do
+        expect(response.body).to match(/Validation failed: Name can't be blank, Quantity can't be blank/)
+      end
+    end
+  end
   #
   # describe 'PUT /shops/:shop_id/list' do
   #   let(:valid_attributes) { { total_capacity: 25 } }

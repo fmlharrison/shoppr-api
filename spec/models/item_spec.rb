@@ -5,6 +5,5 @@ RSpec.describe Item, type: :model do
 
   #Validation test
   it { should validate_presence_of(:name) }
-  it { should validate_presence_of(:brand) }
   it { should validate_presence_of(:quantity) }
 end

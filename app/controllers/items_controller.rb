@@ -7,7 +7,16 @@ class ItemsController < ApplicationController
     json_response(@list.items)
   end
 
+  def create
+    @item = @list.items.create!(item_params)
+    json_response(@item, :created)
+  end
+
   private
+
+  def item_params
+    params.permit(:name, :brand, :max_price, :quantity, :comment)
+  end
 
   def set_shop
     @shop = Shop.find(params[:shop_id])
