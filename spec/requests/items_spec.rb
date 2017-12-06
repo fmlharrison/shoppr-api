@@ -94,7 +94,7 @@ RSpec.describe 'Items API', type: :request do
     end
   end
 
-  describe 'PUT /shops/:shop_id/list' do
+  describe 'PUT /shops/:shop_id/list/item/:id' do
     let(:valid_attributes) { { max_price: 8 } }
 
     before { put "/shops/#{shop_id}/list/items/#{id}", params: valid_attributes }
@@ -122,13 +122,13 @@ RSpec.describe 'Items API', type: :request do
       end
     end
   end
-  #
-  # #Test suite for DELETE /shops/:id/list
-  # describe 'DELETE /shops/:shop_id/list' do
-  #   before { delete "/shops/#{shop_id}/list" }
-  #
-  #   it 'returns status code 204' do
-  #     expect(response).to have_http_status(204)
-  #   end
-  # end
+
+  #Test suite for DELETE /shops/:shop_id/list/items/:id
+  describe 'DELETE /shops/:shop_id/list' do
+    before { delete "/shops/#{shop_id}/list/items/#{id}" }
+
+    it 'returns status code 204' do
+      expect(response).to have_http_status(204)
+    end
+  end
 end

@@ -21,6 +21,11 @@ class ItemsController < ApplicationController
     head :no_content
   end
 
+  def destroy
+    @item.destroy
+    head :no_content
+  end
+
   private
 
   def item_params
