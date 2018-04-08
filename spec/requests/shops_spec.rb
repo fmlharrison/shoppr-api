@@ -47,7 +47,7 @@ RSpec.describe 'Shops API', type: :request do
 
   describe 'POST /shops' do
   # valid payload
-    let(:valid_attributes) { { location: 'Tescos', date: DateTime.now, shop_kind: 'food', shopper: 'Felix' } }
+    let(:valid_attributes) { { location: 'Tescos', date: DateTime.now, shop_kind: 'food', shopper: 1234 } }
 
     context 'when the request is valid' do
       before { post '/shops', params: valid_attributes }
@@ -62,7 +62,7 @@ RSpec.describe 'Shops API', type: :request do
     end
 
     context 'when the request is invalid' do
-      before { post '/shops', params: { location: 'Foobar', shop_kind: 'food', shopper: 'Felix' } }
+      before { post '/shops', params: { location: 'Foobar', shop_kind: 'food', shopper: 1234 } }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)

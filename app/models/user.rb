@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_secure_password
+  
   has_many :items, foreign_key: :user_id
   has_many :shops, foreign_key: :shopper
 
