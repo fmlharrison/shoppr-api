@@ -2,7 +2,7 @@ class ShopsController < ApplicationController
   before_action :set_shop, only: [:show, :update, :destroy]
   # GET /shops
   def index
-    @shops = Shop.all
+    @shops = current_user.shops
     json_response(@shops)
   end
 
@@ -13,7 +13,7 @@ class ShopsController < ApplicationController
 
   #POST /shops
   def create
-    @shop = Shop.create!(shop_params)
+    @shop = current_user.shops.create!(shop_params)
     json_response(@shop, :created)
   end
 
@@ -25,14 +25,14 @@ class ShopsController < ApplicationController
 
   #DELETE /shops/:id
   def destroy
-      @shop.destroy
-      head :no_content
+    @shop.destroy
+    head :no_content
   end
 
   private
 
   def shop_params
-    params.permit(:location, :date, :shop_kind, :shopper)
+    params.permit(:location, :date, :shop_kind)
   end
 
   def set_shop

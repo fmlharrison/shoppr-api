@@ -1,15 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe 'Items API', type: :request do
-  let!(:shop) { create(:shop) }
+  let(:user) { create(:user) }
+  let!(:shop) { create(:shop, shopper: user.id) }
   let!(:list) { create(:list, shop_id: shop.id) }
-  let!(:items) { create_list(:item, 5, list_id: list.id) }
+  let!(:items) { create_list(:item, 5, list_id: list.id, user_id: user.id) }
   let(:shop_id) { shop.id }
   let(:id) { items.first.id }
 
+  let(:headers) { valid_headers }
+
   describe 'GET /shops/:shop_id/list/items' do
     context 'when a list exists' do
-      before { get "/shops/#{shop_id}/list/items" }
+      before { get "/shops/#{shop_id}/list/items", params: {}, headers: headers }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)
@@ -24,7 +27,7 @@ RSpec.describe 'Items API', type: :request do
       let!(:new_shop) { create(:shop) }
       let(:new_shop_id) { new_shop.id }
 
-      before { get "/shops/#{new_shop_id}/list/items" }
+      before { get "/shops/#{new_shop_id}/list/items", params: {}, headers: headers }
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
@@ -37,7 +40,7 @@ RSpec.describe 'Items API', type: :request do
   end
 
   describe 'GET /shops/:shop_id/list/items/:id' do
-    before { get "/shops/#{shop_id}/list/items/#{id}" }
+    before { get "/shops/#{shop_id}/list/items/#{id}", params: {}, headers: headers }
 
     context 'when a item exists' do
       it 'returns status code 200' do
@@ -63,10 +66,10 @@ RSpec.describe 'Items API', type: :request do
   end
 
   describe 'POST /shops/:shop_id/list/item' do
-    let(:valid_attributes) { { name: 'Bacon', brand: 'Tesco', max_price: 5, quantity: 1, comment: '8 rashes please.' } }
+    let(:valid_attributes) { { name: 'Bacon', brand: 'Tesco', max_price: 5, quantity: 1, comment: '8 rashes please.' }.to_json }
 
     context 'when request attributes are valid' do
-      before { post "/shops/#{shop_id}/list/items", params: valid_attributes }
+      before { post "/shops/#{shop_id}/list/items", params: valid_attributes, headers: headers }
 
       it 'returns status code 201' do
         expect(response).to have_http_status(201)
@@ -78,11 +81,12 @@ RSpec.describe 'Items API', type: :request do
         expect(json['max_price']).to eq('5.0')
         expect(json['quantity']).to eq(1)
         expect(json['comment']).to eq('8 rashes please.')
+        expect(json['user_id']).to eq(user.id)
       end
     end
 
     context 'when an invalid request' do
-      before { post "/shops/#{shop_id}/list/items", params: {} }
+      before { post "/shops/#{shop_id}/list/items", params: {}, headers: headers }
 
       it 'returns status code 422' do
         expect(response).to have_http_status(422)
@@ -95,9 +99,9 @@ RSpec.describe 'Items API', type: :request do
   end
 
   describe 'PUT /shops/:shop_id/list/item/:id' do
-    let(:valid_attributes) { { max_price: 8 } }
+    let(:valid_attributes) { { max_price: 8 }.to_json }
 
-    before { put "/shops/#{shop_id}/list/items/#{id}", params: valid_attributes }
+    before { put "/shops/#{shop_id}/list/items/#{id}", params: valid_attributes, headers: headers }
 
     context 'when list exists' do
       it 'returns status code 204' do
@@ -125,7 +129,7 @@ RSpec.describe 'Items API', type: :request do
 
   #Test suite for DELETE /shops/:shop_id/list/items/:id
   describe 'DELETE /shops/:shop_id/list' do
-    before { delete "/shops/#{shop_id}/list/items/#{id}" }
+    before { delete "/shops/#{shop_id}/list/items/#{id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
